@@ -1,6 +1,6 @@
 # Class-Orderbook
 
-This project was created for my Database Systems Design and Management ccourse, where the requirement was to build a locally hosted website that uses PHP to connect to a relational database and dynamically display data through a browser interface.
+This project was created for my Database Systems Design and Management course, where the requirement was to build a locally hosted website that uses PHP to connect to a relational database and display data through a browser interface.
 
 To make the project unique, I build a system around QuantumEdge Markets, a fictional high-frequency trading (HFT) firm. HFT systems rely on extremely low-latency infrastructure, and even small delays can impact profitability. This project simulates that environment by storing mock trading data, strategy performance, execution latencies, and portfolio analytics in a MySQL database, then rendering it through a PHP-based dashboard.
 
