@@ -24,8 +24,8 @@
 <header>
     <nav>
         <a href="index.php">Home</a>
-        <a href="pages/login.php">Login</a>
-        <a href="pages/register.php">Register</a>
+        <a href="pages/login/login.html">Login</a>
+        <a href="pages/register/register.html">Register</a>
     </nav>
 </header>
 
@@ -33,7 +33,7 @@
 <main style="padding: 20px;">
     <h1>Welcome to the Orderbook </h1>
     <p>This is a simple educational project simulating a high-frequency trading firm's internal data dashboard.</p>
-    <p>Please <a href="pages/login.php">log in</a> to access your trader dashboard.</p>
+    <p>Please <a href="pages/login/login.html">log in</a> to access your trader dashboard.</p>
 </main>
 
 </body>
