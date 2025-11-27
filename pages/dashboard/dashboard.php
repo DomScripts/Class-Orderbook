@@ -16,6 +16,6 @@ if (!isset($_SESSION["TraderID"])) {
     <h1>Welcome!</h1>
     <p>You are logged in as: <?php echo htmlspecialchars($_SESSION["Email"]); ?></p>
 
-    <p><a href="logout.php">Logout</a></p>
+    <p><a href="../logout/logout.php">Logout</a></p>
 </body>
 </html>
