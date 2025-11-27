@@ -43,8 +43,8 @@
 <header>
     <nav>
         <a href="../../index.php">Home</a>
-        <a href="../login/login.html">Login</a>
-        <a href="register.html">Register</a>
+        <a href="../login/login.php">Login</a>
+        <a href="register.php">Register</a>
     </nav>
 </header>
 
@@ -53,7 +53,7 @@
 
     <form action="register_handler.php" method="POST">
         <label>Name:</label>
-        <input type="name" name="email" required>        
+        <input type="text" name="name" required>        
 
         <label>Email:</label>
         <input type="email" name="email" required>
@@ -61,14 +61,11 @@
         <label>Password:</label>
         <input type="password" name="password" required>
 
-        <label>Confirm Password:</label>
-        <input type="password" name="confirm_password" required>
-
         <button type="submit">Create Account</button>
     </form>
 
     <p class="small-text">
-        Already have an account? <a href="../login/login.html">Login here</a>
+        Already have an account? <a href="../login/login.php">Login here</a>
     </p>
 </div>
 

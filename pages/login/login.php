@@ -1,6 +1,8 @@
-<?php
-// Later you can add session checks here
-?>
+<?php if (isset($_GET['registered']) && $_GET['registered'] == 1): ?>
+<script>
+    alert("Registration successful! You can now log in.");
+</script>
+<?php endif; ?>
 
 <!DOCTYPE html>
 <html>
@@ -51,8 +53,8 @@
 <header>
     <nav>
         <a href="../../index.php">Home</a>
-        <a href="login.html">Login</a>
-        <a href="../register/register.html">Register</a>
+        <a href="login.php">Login</a>
+        <a href="../register/register.php">Register</a>
     </nav>
 </header>
 
@@ -70,7 +72,7 @@
     </form>
 
     <p class="small-text">
-        No account? <a href="../register/register.html">Register here</a>
+        No account? <a href="../register/register.php">Register here</a>
     </p>
 </div>
 
