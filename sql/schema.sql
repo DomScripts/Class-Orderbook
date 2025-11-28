@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Asset (
     AssetId INT PRIMARY KEY AUTO_INCREMENT,
     Symbol VARCHAR(14) NOT NULL UNIQUE,     -- Largest possible symbol name for a stock is 14 on FINRA, crypto has no standard :\ 
     Name VARCHAR(100),
-    AssetTyle ENUM('Stock', 'Crypto') NOT NULL,
+    AssetType ENUM('Stock', 'Crypto') NOT NULL,
     Exchange VARCHAR(50)
 );
 
@@ -27,12 +27,11 @@ CREATE TABLE IF NOT EXISTS MarketData (
     DataID INT PRIMARY KEY AUTO_INCREMENT,
     AssetID INT NOT NULL,
     Timestamp DATETIME NOT NULL,
-    Open DECIMAL(10, 2),
-    High DECIMAL(10, 2),
-    Low DECIMAL(10, 2),
-    Close DECIMAL(10, 2),
-    Volume DECIMAL(15, 2),
-    UNIQUE(AssetID, TimeStamp),     
+    bid_price DECIMAL(18, 8),
+    bid_qty DECIMAL(18, 8),
+    ask_price DECIMAL(18, 8),
+    ask_qty DECIMAL(18, 8),
+    UNIQUE(TimeStamp),     
     FOREIGN KEY (AssetID) REFERENCES Asset(AssetID)
 );
 
