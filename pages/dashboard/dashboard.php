@@ -94,11 +94,7 @@ if (!isset($_SESSION['TraderID'])) {
 
 <?php
 function formatNum($value) {
-    if (is_numeric($value)) {
-        return number_format((float)$value, 5);
-    }
-
-    return htmlspecialchars($value);
+    return is_numeric($value) ? number_format((float)$value, 5) : htmlspecialchars($value);
 }
 
 $columnNames = [

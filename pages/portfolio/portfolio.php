@@ -63,7 +63,7 @@ if (!isset($_SESSION['TraderID'])) {
 
 <!-- HEADER BAR -->
 <div class="header">
-    <div class="logo">Orderbook - Strategy</div>
+    <div class="logo">Orderbook - Portfolio</div>
     <div class="nav-links">
         <a href="../dashboard/dashboard.php">Dashboard</a>
         <a href="portfolio.php">Portfolio</a>
@@ -72,5 +72,52 @@ if (!isset($_SESSION['TraderID'])) {
 </div>
 
 <h1 style="text-align:center; margin-top: 20px;">Portfolio</h1>
+
+<?php
+function formatNum($value) {
+    return is_numeric($value) ? number_format((float)$value, 2) : htmlspecialchars($value);
+}
+
+try {
+    $stmt = $conn->prepare("
+        SELECT 
+            Portfolio.AssetID,
+            Asset.Name AS AssetName,
+            Portfolio.QuantityHeld,
+            Portfolio.AverageCost,
+            (Portfolio.QuantityHeld * Portfolio.AverageCost) AS TotalValue
+        FROM Portfolio
+        INNER JOIN Asset ON Portfolio.AssetID = Asset.AssetID
+    ");
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($rows) {
+        echo "<table>";
+        echo "<tr>
+                <th>Asset</th>
+                <th>Quantity Held</th>
+                <th>Average Cost</th>
+                <th>Total Value</th>
+              </tr>";
+
+        foreach ($rows as $row) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['AssetName']) . "</td>";
+            echo "<td>" . formatNum($row['QuantityHeld']) . "</td>";
+            echo "<td>" . formatNum($row['AverageCost']) . "</td>";
+            echo "<td>" . formatNum($row['TotalValue']) . "</td>";
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    } else {
+        echo "<p style='text-align:center;'>No portfolio data found.</p>";
+    }
+} catch (PDOException $e) {
+    echo "<p style='color:red; text-align:center;'>Error: " . htmlspecialchars($e->getMessage()) . "</p>";
+}
+?>
+
 </body>
 </html>
