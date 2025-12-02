@@ -66,8 +66,6 @@ if (!isset($_SESSION['TraderID'])) {
     <div class="logo">Orderbook - Strategy</div>
     <div class="nav-links">
         <a href="../dashboard/dashboard.php">Dashboard</a>
-        <a href="../strategy/strategy.php">Strategy</a>
-        <a href="../traders/traders.php">Traders</a>
         <a href="portfolio.php">Portfolio</a>
         <a href="../logout/logout.php">Logout</a>
     </div>
