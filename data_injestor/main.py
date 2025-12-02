@@ -1,21 +1,22 @@
-import time
 from fetch_orderbook import fetch_binance_orderbook
 from db import overwrite_orderbook
+import time
+
+ASSETS = {
+    1: "BTCUSDT",
+    2: "ETHUSDT",
+    3: "SOLUSDT"
+}
 
 def main():
-    print("Starting orderbook ingestion (overwrite mode)...")
-
     while True:
-        try:
-            ASSET_ID = 1
+        for asset_id, symbol in ASSETS.items():
+            print(f"Fetching {symbol}...")
+            levels = fetch_binance_orderbook(symbol)
+            overwrite_orderbook(asset_id, levels)
+            print(f"Stored top 5 levels for {symbol}.")
 
-            levels = fetch_binance_orderbook("BTCUSDT")
-            overwrite_orderbook(levels, asset_id=ASSET_ID)
-            print("Updated current top 5 bids/asks.")
-        except Exception as e:
-            print("Error:", e)
-
-        time.sleep(2)  # update every 2 seconds
+        time.sleep(3)  # update frequency
 
 if __name__ == "__main__":
     main()

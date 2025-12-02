@@ -4,32 +4,26 @@ from config import DB_CONFIG
 def get_connection():
     return mysql.connector.connect(**DB_CONFIG)
 
-def overwrite_orderbook(levels, asset_id=1):
-    """
-    levels: list of 5 dicts with:
-        timestamp, bid_price, bid_qty, ask_price, ask_qty
-    asset_id: integer referring to Asset table
-    """
+def overwrite_orderbook(asset_id, levels):
     conn = get_connection()
     cursor = conn.cursor()
 
-    # Clear previous state for this asset
-    cursor.execute("DELETE FROM MarketData WHERE AssetId = %s", (asset_id,))
+    cursor.execute("DELETE FROM MarketData WHERE AssetID = %s", (asset_id,))
 
     sql = """
         INSERT INTO MarketData 
-        (timestamp, bid_price, bid_qty, ask_price, ask_qty, AssetId)
+        (AssetID, timestamp, bid_price, bid_qty, ask_price, ask_qty)
         VALUES (%s, %s, %s, %s, %s, %s)
     """
 
     data = [
         (
+            asset_id,
             lvl["timestamp"],
             lvl["bid_price"],
             lvl["bid_qty"],
             lvl["ask_price"],
-            lvl["ask_qty"],
-            asset_id
+            lvl["ask_qty"]
         )
         for lvl in levels
     ]

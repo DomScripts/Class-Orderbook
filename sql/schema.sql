@@ -59,3 +59,10 @@ CREATE TABLE IF NOT EXISTS Portfolio (
     FOREIGN KEY (TraderID) REFERENCES Trader(TraderID),
     FOREIGN KEY (AssetID) REFERENCES Asset(AssetID)
 );
+
+INSERT INT Asset (Symbol, Name, AssetType, Exchange) VALUES (BTCUSDT, Bitcoin, Crypto, Binance US);
+
+INSERT INTO Asset (AssetId, Symbol, Name, AssetType, Exchange) VALUES
+(1, 'BTCUSDT', 'Bitcoin', 'Crypto', 'BinanceUS'),
+(2, 'ETHUSDT', 'Ethereum', 'Crypto', 'BinanceUS'),
+(3, 'SOLUSDT', 'Solana', 'Crypto', 'BinanceUS');

@@ -44,7 +44,24 @@ if (!isset($_SESSION['TraderID'])) {
             text-decoration: underline;
         }
 
-        /* -- TABLE -- */
+        /* -- FILTER BAR -- */
+        .filter-bar {
+            width: 90%;
+            margin: 16px auto;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 12px;
+        }
+        .filter-bar label {
+            font-weight: bold;
+        }
+        select {
+            padding: 6px;
+            font-size: 14px;
+        }
+       
+         /* -- TABLE -- */
         table {
             width: 90%;
             margin: 20px auto;
@@ -93,22 +110,61 @@ $columnNames = [
     'ask_qty' => 'Ask Quantity'
 ];
 
+// --- Load asset list for dropdown ---
 try {
-    $stmt = $conn->prepare("SELECT bid_price, bid_qty, ask_price, ask_qty FROM MarketData ORDER BY Timestamp DESC LIMIT 50");
-    $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $assetStmt = $conn->prepare("SELECT AssetID, Symbol, Name FROM Asset ORDER BY Name, Symbol");
+    $assetStmt->execute();
+    $assets = $assetStmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "<p style='color:red; text-align:center;'>Error loading assets: " . htmlspecialchars($e->getMessage()) . "</p>";
+    $assets = [];
+}
 
+// --- Get selected asset from GET (preserve selection on refresh) ---
+$selectedAsset = isset($_GET['asset_id']) && $_GET['asset_id'] !== '' ? (int) $_GET['asset_id'] : null;
+?>
+
+<!-- FILTER / DROPDOWN -->
+<div class="filter-bar">
+    <form method="GET" id="assetFilterForm">
+        <label for="asset_id">Show Asset:</label>
+        <select name="asset_id" id="asset_id" onchange="document.getElementById('assetFilterForm').submit()">
+            <option value="">All Assets</option>
+            <?php foreach ($assets as $a): 
+                $label = $a['Symbol'] ? htmlspecialchars($a['Symbol']) . " — " . htmlspecialchars($a['Name']) : htmlspecialchars($a['Name']);
+                $selected = ($selectedAsset !== null && $selectedAsset === (int)$a['AssetID']) ? 'selected' : '';
+            ?>
+                <option value="<?= (int)$a['AssetID'] ?>" <?= $selected ?>><?= $label ?></option>
+            <?php endforeach; ?>
+        </select>
+    </form>
+</div>
+
+<?php
+try {
+    if ($selectedAsset) {
+        $stmt = $conn->prepare("SELECT bid_price, bid_qty, ask_price, ask_qty, AssetID FROM MarketData WHERE AssetID = :aid ORDER BY Timestamp DESC LIMIT 50");
+        $stmt->execute([':aid' => $selectedAsset]);
+    } else {
+        $stmt = $conn->prepare("SELECT bid_price, bid_qty, ask_price, ask_qty, AssetID FROM MarketData ORDER BY Timestamp DESC LIMIT 50");
+        $stmt->execute();
+    }
+
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+   
     if ($rows) {
         echo "<table>";
         echo "<tr>";
         foreach ($rows[0] as $col => $val) {
+            if ($col === 'AssetID') continue;
             echo "<th>" . htmlspecialchars($columnNames[$col] ?? $col) . "</th>";
         }
         echo "</tr>";
 
         foreach ($rows as $row) {
             echo "<tr>";
-            foreach ($row as $val) {
+            foreach ($row as $col=>$val) {
+                if ($col === 'AssetID') continue;
                 echo "<td>" . formatNum($val) . "</td>";
             }
             echo "</tr>";
