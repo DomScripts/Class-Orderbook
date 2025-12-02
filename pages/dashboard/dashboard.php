@@ -120,33 +120,36 @@ try {
     $assets = [];
 }
 
-// --- Get selected asset from GET (preserve selection on refresh) ---
-$selectedAsset = isset($_GET['asset_id']) && $_GET['asset_id'] !== '' ? (int) $_GET['asset_id'] : null;
+$selectedAsset = $_GET['asset_id'] ?? null;
+if ($selectedAsset === null) {
+    $stmt = $conn->query("SELECT AssetID FROM Asset ORDER BY AssetID ASC LIMIT 1");
+    $selectedAsset = $stmt->fetchColumn();
+}
+
+// Fetch all assets for the dropdown
+$assets = $conn->query("SELECT AssetID, Symbol FROM Asset ORDER BY AssetID ASC")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- FILTER / DROPDOWN -->
-<div class="filter-bar">
-    <form method="GET" id="assetFilterForm">
-        <label for="asset_id">Show Asset:</label>
-        <select name="asset_id" id="asset_id" onchange="document.getElementById('assetFilterForm').submit()">
-            <option value="">All Assets</option>
-            <?php foreach ($assets as $a): 
-                $label = $a['Symbol'] ? htmlspecialchars($a['Symbol']) . " — " . htmlspecialchars($a['Name']) : htmlspecialchars($a['Name']);
-                $selected = ($selectedAsset !== null && $selectedAsset === (int)$a['AssetID']) ? 'selected' : '';
-            ?>
-                <option value="<?= (int)$a['AssetID'] ?>" <?= $selected ?>><?= $label ?></option>
-            <?php endforeach; ?>
-        </select>
-    </form>
-</div>
+
+<form method="GET" style="text-align:center; margin-top: 10px;">
+    <label for="asset_id">Asset:</label>
+    <select name="asset_id" id="asset_id" onchange="this.form.submit()">
+        <?php foreach ($assets as $asset): ?>
+            <option value="<?= $asset['AssetID'] ?>"
+                <?= ($asset['AssetID'] == $selectedAsset) ? 'selected' : '' ?>>
+                <?= htmlspecialchars($asset['Symbol']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</form>
 
 <?php
 try {
     if ($selectedAsset) {
-        $stmt = $conn->prepare("SELECT bid_price, bid_qty, ask_price, ask_qty, AssetID FROM MarketData WHERE AssetID = :aid ORDER BY Timestamp DESC LIMIT 50");
-        $stmt->execute([':aid' => $selectedAsset]);
+        $stmt = $conn->prepare("SELECT bid_price, bid_qty, ask_price, ask_qty FROM MarketData WHERE AssetID = :asset ORDER BY Timestamp DESC LIMIT 50");
+        $stmt->execute([':asset' => $selectedAsset]);
     } else {
-        $stmt = $conn->prepare("SELECT bid_price, bid_qty, ask_price, ask_qty, AssetID FROM MarketData ORDER BY Timestamp DESC LIMIT 50");
+        $stmt = $conn->prepare("SELECT bid_price, bid_qty, ask_price, ask_qty FROM MarketData ORDER BY Timestamp DESC LIMIT 50");
         $stmt->execute();
     }
 
