@@ -2,16 +2,28 @@
 <head>
     <title>Register - Class Orderbook</title>
     <style>
-        header {
-            background-color: #eee;
-            padding: 10px;
+        /* -- HEADER BAR -- */
+        .header {
+            background-color: #333;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        nav a {
-            margin-right: 15px;
-            text-decoration: none;
+        .header .logo {
+            color: white;
+            font-size: 18px;
             font-weight: bold;
         }
-
+        .nav-links a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
         .center-box {
             max-width: 300px;
             margin: 80px auto;
@@ -40,13 +52,15 @@
 
 <body>
 
-<header>
-    <nav>
+<!-- HEADER BAR -->
+<div class="header">
+    <div class="logo">Orderbook - Home</div>
+    <div class="nav-links">
         <a href="../../index.php">Home</a>
         <a href="../login/login.php">Login</a>
         <a href="register.php">Register</a>
-    </nav>
-</header>
+    </div>
+</div>
 
 <div class="center-box">
     <h2 style="text-align:center;">Register</h2>
