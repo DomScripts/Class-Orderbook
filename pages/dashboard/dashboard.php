@@ -93,18 +93,7 @@ if (!isset($_SESSION['TraderID'])) {
 <h1 style="text-align:center; margin-top: 20px;">Orderbook</h1>
 
 <?php
-function formatNum($value) {
-    return is_numeric($value) ? number_format((float)$value, 5) : htmlspecialchars($value);
-}
-
-$columnNames = [
-    'bid_price' => 'Bid Price',
-    'bid_qty' => 'Big Quantity',
-    'ask_price' => 'Ask Price',
-    'ask_qty' => 'Ask Quantity'
-];
-
-// --- Load asset list for dropdown ---
+// Load asset list for dropdown
 try {
     $assetStmt = $conn->prepare("SELECT AssetID, Symbol, Name FROM Asset ORDER BY Name, Symbol");
     $assetStmt->execute();
@@ -138,6 +127,17 @@ $assets = $conn->query("SELECT AssetID, Symbol FROM Asset ORDER BY AssetID ASC")
 </form>
 
 <?php
+function formatNum($value) {
+    return is_numeric($value) ? number_format((float)$value, 5) : htmlspecialchars($value);
+}
+
+$columnNames = [
+    'bid_price' => 'Bid Price',
+    'bid_qty' => 'Big Quantity',
+    'ask_price' => 'Ask Price',
+    'ask_qty' => 'Ask Quantity'
+];
+
 try {
     if ($selectedAsset) {
         $stmt = $conn->prepare("SELECT bid_price, bid_qty, ask_price, ask_qty FROM MarketData WHERE AssetID = :asset ORDER BY Timestamp DESC LIMIT 50");
